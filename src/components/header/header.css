@@ -1,0 +1,98 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo section */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #8a4baf;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.imagelogo {
+  width: 60px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* Navigation Links */
+.link {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.link a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.link a:hover {
+  color: #8a4baf;
+  transform: translateY(-2px);
+}
+
+/* Book Trial Button */
+.trailDemo {
+  padding: 10px 20px;
+  background-color: #8a4baf;
+  color: white !important;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.trailDemo:hover {
+  background-color: #732d91;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+  }
+
+  .imagelogo {
+    width: 45px;
+  }
+
+  .link {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .trailDemo {
+    padding: 8px 15px;
+  }
+}
