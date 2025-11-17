@@ -26,3 +26,122 @@
     }
   }
 }
+
+/* Modernized Account Page Styles */
+.account-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5fa 0%, #e0c3fc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile.modern-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(138, 75, 175, 0.15);
+  padding: 40px 32px 32px 32px;
+  width: 350px;
+  max-width: 95vw;
+  text-align: center;
+  position: relative;
+  transition: box-shadow 0.3s;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8a4baf 60%, #e0c3fc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #fff;
+  font-weight: 700;
+  margin: 0 auto 18px auto;
+  box-shadow: 0 2px 8px rgba(138, 75, 175, 0.12);
+}
+
+.profile-title {
+  font-size: 2rem;
+  color: #8a4baf;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+.profile-info {
+  margin-top: 10px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+}
+
+.profile-label {
+  color: #8a4baf;
+  font-weight: 600;
+}
+
+.profile-value {
+  color: #333;
+  font-weight: 500;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.dashboard-btn {
+  background: linear-gradient(90deg, #8a4baf 60%, #ff7a00 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(138, 75, 175, 0.10);
+}
+
+.admin-btn {
+  background: linear-gradient(90deg, #ff7a00 60%, #8a4baf 100%);
+  color: #fff;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background: linear-gradient(90deg, #e53935 60%, #8a4baf 100%);
+  color: #fff;
+  font-weight: 600;
+}
+
+.common-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.common-btn:hover {
+  box-shadow: 0 4px 16px rgba(138, 75, 175, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+@media (max-width: 600px) {
+  .profile.modern-card {
+    padding: 24px 8px;
+    width: 98vw;
+  }
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 1.7rem;
+  }
+  .profile-title {
+    font-size: 1.3rem;
+  }
+}

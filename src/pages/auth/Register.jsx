@@ -6,14 +6,14 @@ import { UserData } from "../../context/UserContext";
 const Register = () => {
   const navigate = useNavigate();
   const { btnLoading, registerUser } = UserData();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await registerUser(name, email, password, navigate);
+    await registerUser(name, password, navigate);
   };
+
   return (
     <div className="auth-page">
       <div className="auth-form">
@@ -24,14 +24,6 @@ const Register = () => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
-          />
-
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
@@ -48,7 +40,7 @@ const Register = () => {
           </button>
         </form>
         <p>
-          have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>

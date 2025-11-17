@@ -7,7 +7,7 @@ const Header = ({ isAuth }) => {
   return (
     <header className="header">
       <div className="logo">
-        <img src={uwtlogo} alt="logo" srcset="" className="imagelogo"/>
+        <img src={uwtlogo} alt="logo" srcSet="" className="imagelogo"/>
         <h1>United World tutors</h1>
         
       </div>

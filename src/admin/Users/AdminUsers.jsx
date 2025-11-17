@@ -8,70 +8,75 @@ import toast from "react-hot-toast";
 
 const AdminUsers = ({ user }) => {
   const navigate = useNavigate();
-
-  if (user && user.mainrole !== "superadmin") return navigate("/");
-
   const [users, setUsers] = useState([]);
 
-  async function fetchUsers() {
+  // ✅ Redirect if not superadmin
+  useEffect(() => {
+    if (user && user.mainrole !== "superadmin") {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  // ✅ Fetch all users (with token)
+  const fetchUsers = async () => {
     try {
       const { data } = await axios.get(`${server}/api/users`, {
         headers: {
-          token: localStorage.getItem("token"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       setUsers(data.users);
     } catch (error) {
-      console.log(error);
+      console.error(error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || "Failed to load users");
     }
-  }
+  };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // ✅ Update user role
   const updateRole = async (id) => {
-    if (confirm("are you sure you want to update this user role")) {
+    if (window.confirm("Are you sure you want to update this user's role?")) {
       try {
         const { data } = await axios.put(
           `${server}/api/user/${id}`,
           {},
           {
             headers: {
-              token: localStorage.getItem("token"),
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
 
         toast.success(data.message);
-        fetchUsers();
+        fetchUsers(); // Refresh user list
       } catch (error) {
-        toast.error(error.response.data.message);
+        console.error(error.response?.data?.message || error.message);
+        toast.error(error.response?.data?.message || "Failed to update role");
       }
     }
   };
 
-  console.log(users);
   return (
     <Layout>
       <div className="users">
         <h1>All Users</h1>
-        <table border={"black"}>
+        <table border="1">
           <thead>
             <tr>
-              <td>#</td>
-              <td>name</td>
-              <td>email</td>
-              <td>role</td>
-              <td>update role</td>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Update Role</th>
             </tr>
           </thead>
-
-          {users &&
-            users.map((e, i) => (
-              <tbody>
-                <tr>
+          <tbody>
+            {users.length > 0 ? (
+              users.map((e, i) => (
+                <tr key={e._id}>
                   <td>{i + 1}</td>
                   <td>{e.name}</td>
                   <td>{e.email}</td>
@@ -85,8 +90,15 @@ const AdminUsers = ({ user }) => {
                     </button>
                   </td>
                 </tr>
-              </tbody>
-            ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center" }}>
+                  No users found.
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
     </Layout>

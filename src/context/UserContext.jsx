@@ -11,79 +11,92 @@ export const UserContextProvider = ({ children }) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  async function loginUser(email, password, navigate, fetchMyCourse) {
+  async function loginUser(name, password, navigate, fetchMyCourse) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/login`, {
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        `${server}/api/user/login`,
+        { name, password },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
-      toast.success(data.message);
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      setIsAuth(true);
-      setBtnLoading(false);
-      navigate("/");
-      fetchMyCourse();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
+        setIsAuth(true);
+        toast.success(data.message || "Login successful");
+        navigate("/");
+        if (fetchMyCourse) await fetchMyCourse();
+      } else {
+        throw new Error("No token received");
+      }
     } catch (error) {
-      setBtnLoading(false);
+      console.error("Login error:", error);
       setIsAuth(false);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed. Please check your credentials.");
+    } finally {
+      setBtnLoading(false);
     }
   }
 
-  async function registerUser(name, email, password, navigate) {
+  async function registerUser(name, password, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/register`, {
-        name,
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        `${server}/api/user/register`,
+        { name, password },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
-      toast.success(data.message);
-      localStorage.setItem("activationToken", data.activationToken);
-      setBtnLoading(false);
-      navigate("/verify");
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
+        setIsAuth(true);
+        toast.success(data.message);
+        navigate("/");
+      }
     } catch (error) {
-      setBtnLoading(false);
-      toast.error(error.response.data.message);
-    }
-  }
-
-  async function verifyOtp(otp, navigate) {
-    setBtnLoading(true);
-    const activationToken = localStorage.getItem("activationToken");
-    try {
-      const { data } = await axios.post(`${server}/api/user/verify`, {
-        otp,
-        activationToken,
-      });
-
-      toast.success(data.message);
-      navigate("/login");
-      localStorage.clear();
-      setBtnLoading(false);
-    } catch (error) {
-      toast.error(error.response.data.message);
+      console.error("Registration error:", error);
+      toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+    } finally {
       setBtnLoading(false);
     }
   }
 
   async function fetchUser() {
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoading(false);
+        setIsAuth(false);
+        return;
+      }
+
       const { data } = await axios.get(`${server}/api/user/me`, {
         headers: {
-          token: localStorage.getItem("token"),
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
-      setIsAuth(true);
-      setUser(data.user);
-      setLoading(false);
+      if (data.user) {
+        setUser(data.user);
+        setIsAuth(true);
+      } else {
+        throw new Error("No user data received");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Fetch user error:", error);
+      setIsAuth(false);
+      localStorage.removeItem("token");
+    } finally {
       setLoading(false);
     }
   }
@@ -91,6 +104,7 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     fetchUser();
   }, []);
+
   return (
     <UserContext.Provider
       value={{
@@ -102,12 +116,11 @@ export const UserContextProvider = ({ children }) => {
         btnLoading,
         loading,
         registerUser,
-        verifyOtp,
         fetchUser,
       }}
     >
       {children}
-      <Toaster />
+      <Toaster position="top-center" reverseOrder={false} />
     </UserContext.Provider>
   );
 };

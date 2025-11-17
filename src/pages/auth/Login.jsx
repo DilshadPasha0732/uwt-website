@@ -7,25 +7,25 @@ import { CourseData } from "../../context/CourseContext";
 const Login = () => {
   const navigate = useNavigate();
   const { btnLoading, loginUser } = UserData();
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
   const { fetchMyCourse } = CourseData();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await loginUser(email, password, navigate, fetchMyCourse);
+    await loginUser(name, password, navigate, fetchMyCourse);
   };
   return (
     <div className="auth-page">
       <div className="auth-form">
         <h2>Login</h2>
         <form onSubmit={submitHandler}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="name">Name</label>
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
 

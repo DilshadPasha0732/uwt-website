@@ -5,7 +5,6 @@ import Home from "./pages/home/Home";
 import Header from "./components/header/Header";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import Verify from "./pages/auth/Verify";
 import Footer from "./components/footer/Footer";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
@@ -47,7 +46,6 @@ const App = () => {
               path="/register"
               element={isAuth ? <Home /> : <Register />}
             />
-            <Route path="/verify" element={isAuth ? <Home /> : <Verify />} />
             <Route
               path="/forgot"
               element={isAuth ? <Home /> : <ForgotPassword />}
@@ -72,17 +70,14 @@ const App = () => {
               path="/course/study/:id"
               element={isAuth ? <CourseStudy user={user} /> : <Login />}
             />
-
             <Route
               path="/lectures/:id"
               element={isAuth ? <Lecture user={user} /> : <Login />}
             />
-
             <Route
               path="/admin/dashboard"
               element={isAuth ? <AdminDashbord user={user} /> : <Login />}
             />
-
             <Route
               path="/admin/course"
               element={isAuth ? <AdminCourses user={user} /> : <Login />}

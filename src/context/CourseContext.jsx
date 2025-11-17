@@ -11,19 +11,19 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchCourses() {
     try {
-      const { data } = await axios.get(`${server}/course/all`);
+      const { data } = await axios.get(`${server}/api/course/all`);
       setCourses(data.courses);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching courses:", error.message);
     }
   }
 
   async function fetchCourse(id) {
     try {
-      const { data } = await axios.get(`${server}/course/${id}`);
+      const { data } = await axios.get(`${server}/api/course/${id}`);
       setCourse(data.course);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching course:", error.message);
     }
   }
 
@@ -35,18 +35,31 @@ export const CourseContextProvider = ({ children }) => {
         return;
       }
 
-      const { data } = await axios.get(`${server}/mycourse`, {
-        headers: { token },
+      const { data } = await axios.get(`${server}/api/course/mycourse`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
-      setMyCourse(data.courses);
+      
+      if (data.courses) {
+        setMyCourse(data.courses);
+      }
     } catch (error) {
-      console.log(error.response?.data || error.message);
+      console.error("Error fetching my courses:", error.response?.data?.message || error.message);
     }
   }
 
+  // Only fetch courses on initial load
   useEffect(() => {
     fetchCourses();
-    fetchMyCourse();
+  }, []);
+
+  // Only fetch user's courses if they're authenticated
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchMyCourse();
+    }
   }, []);
 
   return (

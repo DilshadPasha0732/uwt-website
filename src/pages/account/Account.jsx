@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 const Account = ({ user }) => {
   const { setIsAuth, setUser } = UserData();
-
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -18,50 +17,58 @@ const Account = ({ user }) => {
     toast.success("Logged Out");
     navigate("/login");
   };
+
+  // Helper for avatar initials
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
   return (
-    <div>
+    <div className="account-bg">
       {user && (
-        <div className="profile">
-          <h2>My Profile</h2>
+        <div className="profile modern-card">
+          <div className="profile-avatar">
+            {/* Avatar circle with initials */}
+            <span>{getInitials(user.name)}</span>
+          </div>
+          <h2 className="profile-title">My Profile</h2>
           <div className="profile-info">
-            <p>
-              <strong>Name - {user.name}</strong>
-            </p>
-
-            <p>
-              <strong>Email - {user.email}</strong>
-            </p>
-
-            <button
-              onClick={() => navigate(`/${user._id}/dashboard`)}
-              className="common-btn"
-            >
-              <MdDashboard />
-              Dashboard
-            </button>
-
-            <br />
-
-            {user.role === "admin" && (
+            <div className="profile-row">
+              <span className="profile-label">Name:</span>
+              <span className="profile-value">{user.name}</span>
+            </div>
+            {/* Email removed as per new login system */}
+            <div className="profile-row">
+              <span className="profile-label">Role:</span>
+              <span className="profile-value">{user.role}</span>
+            </div>
+            <div className="profile-actions">
               <button
-                onClick={() => navigate(`/admin/dashboard`)}
-                className="common-btn"
+                onClick={() => navigate(`/${user._id}/dashboard`)}
+                className="common-btn dashboard-btn"
               >
-                <MdDashboard />
-                Admin Dashboard
+                <MdDashboard /> Dashboard
               </button>
-            )}
-
-            <br />
-
-            <button
-              onClick={logoutHandler}
-              className="common-btn"
-              style={{ background: "red" }}
-            >
-              <IoMdLogOut />
-              Logout
-            </button>
+              {user.role === "admin" && (
+                <button
+                  onClick={() => navigate(`/admin/dashboard`)}
+                  className="common-btn admin-btn"
+                >
+                  <MdDashboard /> Admin Dashboard
+                </button>
+              )}
+              <button
+                onClick={logoutHandler}
+                className="common-btn logout-btn"
+              >
+                <IoMdLogOut /> Logout
+              </button>
+            </div>
           </div>
         </div>
       )}
